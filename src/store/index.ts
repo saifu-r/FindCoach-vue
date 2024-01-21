@@ -32,9 +32,24 @@ export default createStore({
     }
   },
   mutations: {
+    registerCoach(state, payload){
+      state.coaches.push(payload)
+    }
 
   },
   actions: {
+    registerCoach(context, payload){
+      const coachData={
+        id: 'c3',
+        firstName: payload.first,
+        lastName: payload.last,
+        rate: payload.rate,
+        description: payload.description,
+        areas: payload.areas
+      }
+
+      context.commit('registerCoach', coachData)
+    }
   },
   modules: {
   }

@@ -1,5 +1,5 @@
 <template>
-  <section>Filter</section>
+  <section><coach-filter></coach-filter></section>
   <section>
     <base-card>
     <div class="controls">
@@ -26,17 +26,45 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import CoachItem from "../../components/coaches/CoachItem.vue";
+import CoachFilter from "../../components/coaches/CoachFilter.vue";
 
 export default defineComponent({
-  components: { CoachItem },
+  components: { CoachItem, CoachFilter},
   setup() {
+
+    const activeFilters= ref({
+      frontend: true,
+      backend: true,
+      career: true,
+    })
     const store = useStore();
-    const filteredCoaches = computed(() => store.getters.coaches);
+    const filteredCoaches = computed(() => {
+      const coaches= store.getters.coaches
+      return coaches.filter(coach=>{
+        if(activeFilters.value.frontend && coach.areas.includes('frontend')){
+          return true
+        } 
+        if(activeFilters.value.backend && coach.areas.includes('backend')){
+          return true
+        } 
+        if(activeFilters.value.career && coach.areas.includes('career')){
+          return true
+        } 
+        return false
+      })
+    });
     const hasCoaches = computed(() => store.getters.hasCoaches);
-    return { filteredCoaches, hasCoaches };
+    const setFilters= (updatedFilters: { frontend: boolean; backend: boolean; career: boolean })=>{
+      activeFilters.value= updatedFilters
+      
+    }
+    return { filteredCoaches, hasCoaches, setFilters};
+
+   
+
   },
 });
 </script>

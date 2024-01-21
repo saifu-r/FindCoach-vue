@@ -3,6 +3,7 @@
     <base-card>
       <h2>{{ fullName }}</h2>
       <h3>${{ rate }}/hour</h3>
+      <p>{{ description }}</p>
     </base-card>
   </section>
   <section>
@@ -55,8 +56,11 @@ export default defineComponent({
     const areas=computed(()=>{
         return selectedCoach.value.areas 
     })
+    const description=computed(()=>{
+        return selectedCoach.value.description 
+    })
 
-    return {fullName, contactLink, rate, areas}
+    return {fullName, contactLink, rate, areas, description}
   },
 });
 </script>
