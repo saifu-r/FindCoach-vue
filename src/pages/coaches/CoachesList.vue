@@ -61,6 +61,8 @@ export default defineComponent({
       activeFilters.value= updatedFilters
       
     }
+
+    
     return { filteredCoaches, hasCoaches, setFilters};
 
    

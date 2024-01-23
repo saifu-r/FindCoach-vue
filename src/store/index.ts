@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 
 export default createStore({
+
+  
   state: {
     coaches: [
       {
@@ -21,6 +23,10 @@ export default createStore({
           'I am Julie and as a senior developer in a big tech company, I can help you get your first job or progress in your current role.',
         hourlyRate: 40
       }
+    ],
+    userId: 'c3',
+    requests: [
+     
     ]
   },
   getters: {
@@ -29,27 +35,53 @@ export default createStore({
     },
     hasCoaches(state){
       return state.coaches && state.coaches.length> 0
+    },
+    userId(state){
+      return state.userId
+    },
+    requests(state){
+      return state.requests
+    },
+    hasRequests(state){
+      return state.requests && state.requests.length >0
     }
+    
   },
   mutations: {
     registerCoach(state, payload){
       state.coaches.push(payload)
-    }
+    },
+    addRequest(state, payload: {coachId: string ,userEmail: string, message: string}){
+      state.requests.push(payload)
+    },
 
   },
   actions: {
     registerCoach(context, payload){
       const coachData={
-        id: 'c3',
+        id: context.rootGetters.userId, //rootGetters
         firstName: payload.first,
         lastName: payload.last,
-        rate: payload.rate,
+        hourlyRatexz: payload.rate,
         description: payload.description,
         areas: payload.areas
       }
 
       context.commit('registerCoach', coachData)
+    },
+    addRequest(context, payload){
+      const newRequest= {
+        id: new Date().toISOString(),
+        coachId: payload.coachId,
+        userEmail: payload.userEmail,
+        message: payload.message
+      }
+
+      context.commit("addRequest", newRequest)
+      
     }
+
+
   },
   modules: {
   }
