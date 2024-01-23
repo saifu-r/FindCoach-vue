@@ -1,4 +1,6 @@
 import { createStore } from 'vuex'
+import axios from "axios";
+import { ref } from 'vue';
 
 export default createStore({
 
@@ -26,7 +28,9 @@ export default createStore({
     ],
     userId: 'c3',
     requests: [
-     
+      {coachId: "",
+        userEmail: "",
+        message: ""}
     ]
   },
   getters: {
@@ -51,13 +55,14 @@ export default createStore({
     registerCoach(state, payload){
       state.coaches.push(payload)
     },
-    addRequest(state, payload: {coachId: string ,userEmail: string, message: string}){
+    addRequest(state, payload){
       state.requests.push(payload)
     },
 
   },
   actions: {
-    registerCoach(context, payload){
+    async registerCoach(context, payload){
+      const id= ref(context.rootGetters.userId)
       const coachData={
         id: context.rootGetters.userId, //rootGetters
         firstName: payload.first,
@@ -66,6 +71,16 @@ export default createStore({
         description: payload.description,
         areas: payload.areas
       }
+
+      try{
+        const response= await axios.put(
+          `https://vue-find-coach-fe079-default-rtdb.firebaseio.com/coaches/${id.value}.json`, coachData
+        )
+      }catch(error){
+        console.error("Error loading coach:", error); 
+      }
+
+      
 
       context.commit('registerCoach', coachData)
     },
